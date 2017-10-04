@@ -104,13 +104,4 @@ function ajax(method, url, params){
 }
 
 <script>
-$( "#delete" ).click(function( event ) {
-  event.preventDefault();
-  $( "<div>" )
-    .append( "default " + event.type + " prevented" )
-    .appendTo( "#log" );
-});
-</script>
 
-<a href="http://jquery.com" id="delete">default click action is prevented</a>
-<div id="log"></div>
