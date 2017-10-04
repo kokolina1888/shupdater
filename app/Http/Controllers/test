@@ -1,0 +1,40 @@
+foreach ($sheetData as $data) {
+    // $Detalle_Servicio = Detalle_Servicio::create($entradas);
+//     if($Detalle_Servicio = Detalle_Servicio::create($entradas)) {
+//     $id = $Detalle_Servicio->id;
+//     // ...
+// }
+
+    if($product = Product::create([
+        'model'     => $data['A'], 
+        'sku'       => '',
+        'upc'       => '',
+        'ean'       => '',
+        'jan'       => '',
+        'isbn'      => '',
+        'mpn'       => '',
+        'location'  => '',     
+        'quantity'  => $data['C'], 
+        'stock_status_id'=> 0,
+        'manufacturer_id'=> 5,     
+        'price'     => $data['E'], 
+        'tax_class_id'  => 0,     
+        'date_available'=> date('Y-m-d'),
+        'date_added'    => date('Y-m-d'),
+        'date_modified' => date('Y-m-d'),
+        ])) {
+    $id = $product->id;
+    
+    ProductDescription::create([
+        'language_id'       => 1,
+        'name'              => $data['B'],
+        'description'       => '',
+        'tag'               => '',
+        'meta_title'        => $data['B'],
+        'meta_description'  => '',
+        'meta_keyword'      => '',
+
+        ]);
+}
+}
+        return view('home');

@@ -1,0 +1,116 @@
+//     $(document).ready(function() {
+    //     $('#submit-name').on('submit', function (e) {           
+    //         var name = $('#name').val();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: $(this).attr('method'),
+    //             data: {name:name},
+    //             success: function( msg ) {
+    //                 msg = JSON.parse(msg);
+    //                console.log(msg);
+    //             }
+    //         });
+    //          e.preventDefault();
+    //     });
+    // });
+
+//     $(document).on('submit', '#name', function(e) {
+//      $.ajax({
+//         url: $(this).attr('action'),
+//         type: $(this).attr('method'),
+//         data: $(this).serialize(),
+//         success: function(res) {
+
+//         console.log(res);
+
+//         }
+//     });
+//     e.preventDefault();
+// });
+
+document.getElementById('submit-name').addEventListener('click', SearchByName);
+
+function SearchByName(event){
+    event.preventDefault();
+    var name = document.getElementById('name').value;
+    //TO DO VALIDATION
+    // if(name.length === 0){
+    //     alert('Please enter a valid category name');
+    //     return;
+    // }
+    
+    ajax('POST', "{{ route('get_product_info_by_name') }}", 'name='+name);
+}
+
+
+
+function ajax(method, url, params){
+    var http;
+    //console.log(window.XMLHttpRequest);
+    if(window.XMLHttpRequest){
+        http = new XMLHttpRequest();
+    }
+    else {
+        http = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    http.onreadystatechange = function(){
+        var obj,
+            tableInfo;
+        
+        
+    //  console.log(p);
+        if(http.readyState == XMLHttpRequest.DONE){
+        
+            if (http.status == 200) {  
+                 tableInfo = document.getElementById('table-info');   
+                 console.log(tableInfo);          
+                obj = JSON.parse(http.responseText);               
+                console.log(obj);
+                var len = obj.length, tableString = '';
+
+                for (var i = 0; i < len; i++){
+                    tableString += '<tr>';
+                    tableString += '<td>'+ (i+1) +'</td>';
+                    tableString += '<td>'+ obj[i].id +'</td>';
+                    tableString += '<td>'+ obj[i].model +'</td>';
+                    tableString += '<td>'+ obj[i].name +'</td>';
+                    tableString += '<td>'+ obj[i].price +'</td>';
+                    tableString += '<td>'+ obj[i].quantity +'</td>';
+                    tableString += '</tr>';
+                }
+
+                tableInfo.innerHTML = tableString;
+
+            } else if (http.status == 400) {
+                //p.innerHTML = obj.message;    
+                alert('Category could not be saved. Please try again');
+                           
+            } else {
+                
+                obj = JSON.parse(http.responseText);
+                if (obj.message) {
+                    alert(obj.message);
+                } else {
+                    alert('Please check the name');
+                }           
+            }
+        }
+    };
+
+    http.open(method, url, true);
+    http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    http.send(params + "&_token="+token);
+}
+
+<script>
+$( "#delete" ).click(function( event ) {
+  event.preventDefault();
+  $( "<div>" )
+    .append( "default " + event.type + " prevented" )
+    .appendTo( "#log" );
+});
+</script>
+
+<a href="http://jquery.com" id="delete">default click action is prevented</a>
+<div id="log"></div>
